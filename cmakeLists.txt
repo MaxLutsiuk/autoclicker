@@ -1,0 +1,34 @@
+cmake_minimum_required(VERSION 3.29.3)
+project(autoclicker LANGUAGES CXX)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set (CMAKE_AUTORCC ON)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#======================= INCLUSION OF Qt =======================#
+find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+set(FORMS_DIR "${CMAKE_SOURCE_DIR}/forms")
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${FORMS_DIR})
+#=================== INCLUSION OF Project Files ====================#
+set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
+set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
+set(RESOURCE_DIR "${CMAKE_SOURCE_DIR}/resources")
+
+file(GLOB_RECURSE SOURCES
+    "${FORMS_DIR}/*.ui"
+    "${RESOURCE_DIR}/*.qrc"
+    "${INCLUDE_DIR}/*.h"
+    "${SOURCE_DIR}/*.cpp"
+)
+
+qt_add_executable(autoclicker ${SOURCES})
+
+# Add the target includes for autoclicker 
+target_include_directories(autoclicker PRIVATE ${FORMS_DIR})
+target_include_directories(autoclicker PRIVATE ${INCLUDE_DIR})
+target_include_directories(autoclicker PRIVATE ${SOURCE_DIR})
+
+#===================== LINKING LIBRARIES =======================#
+
+target_link_libraries(autoclicker PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui)
+set_target_properties(autoclicker PROPERTIES WIN32_EXECUTABLE ON)
