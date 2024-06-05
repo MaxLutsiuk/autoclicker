@@ -18,7 +18,7 @@ AutoClickerWindow::AutoClickerWindow()
 	assert(connected);
 
 	connected = QObject::connect(mp_ui->mp_detect_autoclick_btn_first, &QAbstractButton::clicked, this, [this]() {
-		mp_ui->mp_autoclicker_key_lbl_first->setText(_press_any);
+		mp_ui->mp_detect_autoclick_btn_first->setText(_press_any);
 		m_requested_key = KeyToDetect::KEYFIRST;
 		emit detectKey(m_requested_key);
 		});

@@ -1,6 +1,7 @@
 #include "AutoClicker.h"
 #include <thread>
 #include <chrono>
+#include <QDebug>
 
 namespace
 {
@@ -16,7 +17,9 @@ namespace
 		if (i_mouse_btn == VK_MBUTTON)
 			return std::make_pair(MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_MIDDLEDOWN);
 		if (i_mouse_btn == VK_XBUTTON1)
-			return std::make_pair(MOUSEEVENTF_XUP, MOUSEEVENTF_XDOWN);
+			return std::make_pair(MOUSEEVENTF_XUP | XBUTTON1, MOUSEEVENTF_XDOWN | XBUTTON1);
+		if (i_mouse_btn == VK_XBUTTON2)
+			return std::make_pair(MOUSEEVENTF_XUP | XBUTTON2, MOUSEEVENTF_XDOWN | XBUTTON2);
 
 		throw std::invalid_argument("Unsupported mouse button");
 	};
@@ -32,7 +35,7 @@ namespace
 		if (i_mouse_event == WM_MBUTTONUP || i_mouse_event == WM_MBUTTONDOWN)
 			return VK_MBUTTON;
 		if (i_mouse_event == WM_XBUTTONUP || i_mouse_event == WM_XBUTTONDOWN) {
-			return VK_XBUTTON1;
+			return GET_XBUTTON_WPARAM(i_mouse_event) == XBUTTON1 ? VK_XBUTTON1 : VK_XBUTTON2;
 		}
 
 		throw std::invalid_argument("Unsupported mouse event");
@@ -43,7 +46,7 @@ namespace
 
 	LRESULT WINAPI KeyPressedHookProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		if (nCode == HC_ACTION) {
-			if (wParam == WM_KEYDOWN || wParam == WM_KEYUP)
+			if (wParam == WM_KEYDOWN || wParam == WM_KEYUP || wParam == WM_SYSKEYDOWN || wParam == WM_SYSKEYUP)
 			{
 				KBDLLHOOKSTRUCT* pKeyboard = (KBDLLHOOKSTRUCT*)lParam;
 				if (ULONG_PTR ignore_event = pKeyboard->dwExtraInfo; ignore_event == 1)
@@ -51,7 +54,7 @@ namespace
 
 				auto key = pKeyboard->vkCode;
 				auto mouse_button = std::nullopt;
-				auto is_down = WM_KEYDOWN == wParam;
+				auto is_down = wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN;
 				AutoClicker::getInstance().BindKey({ key, mouse_button , is_down });
 			}
 
@@ -162,7 +165,9 @@ namespace
 			if (mouse_btn == VK_MBUTTON)
 				return { "Middle mouse button" };
 			if (mouse_btn == VK_XBUTTON1)
-				return { "X mouse button" };
+				return { "X1 mouse button" };
+			if (mouse_btn == VK_XBUTTON2)
+				return { "X2 mouse button" };
 		}
 
 		throw std::invalid_argument("invalid key or mouse button");
@@ -226,6 +231,7 @@ HHOOK AutoClicker::GetKeyBoardHook() { return mp_keyboard_hook; }
 void AutoClicker::BindKey(const InputKey& i_input)
 {
 	bool is_down = i_input.m_is_down;
+	qDebug() << "is down : " << is_down;
 
 	if (m_key_to_detect != KeyToDetect::NONE)
 	{
@@ -244,6 +250,8 @@ void AutoClicker::BindKey(const InputKey& i_input)
 		m_binded_key_first.m_is_down = is_down;
 	if (i_input == m_binded_key_second)
 		m_binded_key_second.m_is_down = is_down;
+
+	qDebug() << "autoclick active : " << m_do_autoclick;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
