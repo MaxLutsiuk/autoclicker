@@ -36,15 +36,18 @@ public:
 		static AutoClicker INSTANCE;
 		return INSTANCE;
 	}
+
 	void operator=(AutoClicker const&) = delete;
 
 	HHOOK GetMouseHook();
 	HHOOK GetKeyBoardHook();
 	void BindKey(const InputKey& i_input);
 	void ActivateDetection(KeyToDetect i_key_to_detect);
+	void SetCPS(unsigned short i_cps);
 
 signals:
 	void keyDetected(QString);
+
 private:
 	InputKey& _GetTargetKey(KeyToDetect i_key_to_detect);
 	bool _InstallHooks();
@@ -57,6 +60,8 @@ private:
 	InputKey m_activation_key;
 	InputKey m_binded_key_first;
 	InputKey m_binded_key_second;
+
 	bool m_do_autoclick = false;
-	KeyToDetect m_key_to_detect;
+	unsigned short m_cps_value = 1;
+	KeyToDetect m_key_to_detect = KeyToDetect::NONE;
 };

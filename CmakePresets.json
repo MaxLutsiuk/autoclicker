@@ -28,21 +28,33 @@
       },
       "toolchainFile": "",
       "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Debug",
-          "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
-        "hostOS": [ "Windows" ]
+          "hostOS": ["Windows"]
         }
       }
     },
     {
       "name": "windows-release",
-      "inherits": "windows-debug",
+      "inherits": "default",
       "description": "Release build using MSVC on Windows",
+      "generator": "Visual Studio 17 2022",
+      "architecture": {
+        "value": "x64",
+        "strategy": "set"
+      },
+      "toolchainFile": "",
       "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": ["Windows"]
+        }
       }
     }
   ],

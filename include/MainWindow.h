@@ -11,6 +11,8 @@ public:
 
 signals:
 	void detectKey(int);
+	void cpsChanged(unsigned int);
+
 public slots:
 	void SetKeyTitle(const QString& i_key_title);
 

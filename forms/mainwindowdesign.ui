@@ -231,9 +231,9 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLabel" name="label_7">
+        <widget class="QLabel" name="mp_cps_label">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string> CPS: 13</string>
@@ -243,7 +243,7 @@
        <item>
         <widget class="QSlider" name="mp_cps_edit">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
